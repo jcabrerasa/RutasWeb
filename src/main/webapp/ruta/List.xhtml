@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:o="http://omnifaces.org/ui">
+
+
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="Rutas"></h:outputText>
+        </ui:define>
+
+
+        <ui:define name="body">
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhKRPhfU-EX44-VAa5r6b6S_xTa1XOoHU" type="text/javascript"></script>  
+
+
+
+
+
+            <h:form id="RutaListForm">    
+
+                <p:panel  styleClass="panelTabla" >
+
+                    <strong> 
+                        <h:outputText value="Ruta "  /> 
+                        ->
+                        <h:outputText value="Trayectos"  />
+                    </strong> 
+
+                </p:panel>
+                <div class="presenta">        
+                    <div class="ui-g">
+                        <div class="ui-g-4">
+
+                            <p:menu>
+                                <p:submenu label="RUTAS">
+                                    <p:menuitem id="rutasBtn" value="Seleccione Rutas" actionListener="#{rutaController.nuevoModel}" update=":RutaListForm:panelmap" icon="ui-icon-transfer-e-w" />
+
+                                </p:submenu>
+                                <p:submenu label="SOLICITUD">
+                                    <p:menuitem id="turistaBtn" icon="ui-icon-person"   value="#{bundle.Registro}" actionListener="#{turistaController.prepareCreate}" update=":RutaListForm:TuristaCreateForm"/>
+                                    <p:menuitem id="operadorBtn" value="Asigna Operador" actionListener="#{operadorController.prepareCreate}" update=":RutaListForm:TuristaCreateDlg" icon="ui-icon-contact"/>
+                                    <p:menuitem id="solicita" value="Enviar Solicitud" title="Envio de Solicitud al Operador" actionListener="#{trayectoController.cargaMispuntos()}" process="@this" update=":RutaListForm:migmap" icon="ui-icon-mail-closed"/>
+                                </p:submenu>
+                                <p:submenu label="OPCIONES">
+                                     <p:menuitem id="chatBtn" value="CHAT" icon="ui-icon-comment"   async="true" immediate="true"/>
+                                    <p:menuitem value="Limpiar" icon="ui-icon-trash"   actionListener="#{operadorController.limpiar}" action="#{rutaController.nuevoModel}" process="@this" update=":RutaListForm, :RutaListForm:datosOperador, :RutaListForm:datosTurista, :RutaListForm:panelmap"  async="true" immediate="true"/>
+                                    <p:menuitem id="ayudaBtn" value="Ayuda" icon="ui-icon-help"/>
+                                </p:submenu>
+                            </p:menu>
+
+
+
+                            <p:overlayPanel id="rutaPanel" for="rutasBtn" hideEffect="fade">
+                                <p:panel  header="Seleccione Rutas, Luego de clic en Cargar Trayectoria">
+
+                                    <p:pickList id="pickList" value="#{rutaController.rutasdual}" var="rutas" itemValue="#{rutas}" itemLabel="#{rutas.titulo}" converter="#{rutaControllerConverter}"  >
+                                        <o:converter converterId="omnifaces.ListIndexConverter" list="#{rutaController.items}" />
+
+                                    </p:pickList>
+
+                                    <p:commandButton id="rutaSubmit" value="Cargar Trayectoria" actionListener="#{trayectoController.prepareCreate()}" update="RutaListForm:panelmap" style="margin-top:5px" />
+                                    <p:commandButton id="detalleSubmit" value="Ver Detalle Rutas" update="displayRutas" oncomplete="PF('rutaDialog').show()" style="margin-top:5px" />
+
+                                    <p:dialog modal="true" header="Información de Rutas de Cuenca" showEffect="fade" width="700"  resizable="false" appendTo="@(body)" hideEffect="fade" widgetVar="rutaDialog">
+                                        <h:panelGroup id="displayRutas">
+                                            <p:scrollPanel mode="native"  style="height:600px">
+                                                <ui:include src="rutas.xhtml"/> 
+                                            </p:scrollPanel>
+
+
+                                        </h:panelGroup>
+
+
+                                    </p:dialog>                                      
+
+                                </p:panel>
+                            </p:overlayPanel>
+                            <p:overlayPanel id="turistaPanel" for="turistaBtn"  hideEffect="fade">
+                                <ui:include src="Turista.xhtml"/>
+                            </p:overlayPanel>
+                            <p:overlayPanel id="panelAyuda" for="ayudaBtn" hideEffect="fade">
+                                <p:panel  header="Ayuda de Rutas Cuenca">
+
+                                    <p>
+                                        <ul>
+                                            <li>
+                                                De clic en  Seleccione Rutas, luego da clic Cargar Trayectoria
+                                            </li>
+                                            <li>
+                                                Arma tu ruta, selecciona una coordenada y da clic en agregar
+                                            </li>
+                                            <li>
+                                                Ingrese sus datos en Registrate
+                                            </li>
+                                            <li>
+                                                Seleccione un Operador en Asigna Operador
+                                            </li>
+
+                                            <li>
+                                                Envié su Solicitud, de clic en el Icono de Email.
+                                            </li>
+
+                                        </ul>
+
+                                    </p>
+
+                                </p:panel>
+
+                            </p:overlayPanel>
+                            <p:overlayPanel id="operadorPanel" for="operadorBtn" hideEffect="fade">
+                                <ui:include src="Operador.xhtml"/>
+                            </p:overlayPanel>
+                            <p:overlayPanel id="solicitapanel" for="solicita"  hideEffect="fade">
+                                <p:panel header="Mis Puntos">
+                                    <center>
+                                        <p:commandButton id="solicitaSubmit" actionListener="#{rutausuarioController.prepareCreate()}" value="Solicita Tour"  update="growl"  />
+                                    </center>
+                                    <p:gmap id="migmap" center="-2.897028,-79.004416" zoom="15"  type="HYBRID" style="width:700px;height:300px" 
+                                            model="#{trayectoController.miemptyModel}" >
+
+
+                                        <p:ajax event="overlaySelect" listener="#{trayectoController.onMiMarkerSelect}" />
+
+
+                                        <p:gmapInfoWindow id="miinfoWindow">
+                                            <p:outputPanel style="text-align: center; display: block; margin: auto">
+
+                                                <br />
+                                                <h:outputText value="#{trayectoController.mimarker.title}" />
+                                                <br />
+
+                                            </p:outputPanel>
+                                        </p:gmapInfoWindow>
+                                    </p:gmap>
+
+                                </p:panel>
+
+
+
+                            </p:overlayPanel>
+                            <p:overlayPanel id="chatPanel" for="chatBtn" hideEffect="fade">
+                                <iframe src="https://servicioturismocuenca.mybluemix.net/chat" width="500" height="250" align="center"></iframe> 
+                            </p:overlayPanel>
+                        </div>
+
+
+                        <div class="ui-g-8">
+
+                            <p:panel>
+
+                                <h:panelGrid id="datosTurista" > 
+                                    <c:if test="#{turistaController.selected.nombres!=null}">
+                                        <h:panelGrid columns="5" cellpadding="5">
+                                            <strong>  Datos Turista:  </strong> #{turistaController.selected.nombres} <p:spacer width="15"/>
+                                            <strong> Email: </strong> #{turistaController.selected.email}
+                                        </h:panelGrid>
+                                        <br></br>
+                                    </c:if>
+                                </h:panelGrid>
+
+
+                                <h:panelGrid id="datosOperador">
+                                    <c:if test="#{operadorController.selected.nombre !=null}">
+                                        <h:panelGrid columns="10" cellpadding="10">
+                                            <strong>  Datos Operador:  </strong>  #{operadorController.selected.nombre} <p:spacer width="15"/>
+                                            <strong>  Email:  </strong>   #{operadorController.selected.email}<p:spacer width="15"/>
+                                            <strong>  Teléfono:  </strong>  #{operadorController.selected.telefono}<p:spacer width="15"/>
+                                            <strong>  Dirección:  </strong>  #{operadorController.selected.direccion}
+                                        </h:panelGrid>
+                                    </c:if>
+                                </h:panelGrid> 
+
+                            </p:panel>
+
+
+
+
+
+
+                            <p:panel id="panelmap" >
+                                <c:if test="#{trayectoController.selected==null}">
+
+                                      <ui:include src="rutas.xhtml"/> 
+                                  
+                                </c:if>
+
+                                <c:if test="#{trayectoController.selected!=null}">
+                                    <f:view contentType="text/html">
+                                        <center>
+                                            <h5>
+                                                Arma tu ruta, selecciona una coordenada y da clic en agregar
+                                            </h5>
+                                        </center>
+                                        <p:panelGrid id="panelseleccion" columns="3">
+                                            <h:panelGrid columns="2" cellpadding="10">
+                                                <p:panel style="background-color: #0000FF;" styleClass="circulo" ></p:panel>
+
+
+                                                <p:outputLabel value="Inicio"   />
+                                                <p:panel styleClass="circulo"  style="background-color: #ffcc00;"></p:panel>
+
+                                                <p:outputLabel value="Fin"   />
+                                            </h:panelGrid>
+
+
+                                            <p:repeat value="#{trayectoController.mistrayectos}" var="car">
+                                                <h:panelGrid columns="2" cellpadding="10">
+                                                    <p:panel style="background-color: darkorange;" styleClass="circulo" ></p:panel>
+
+
+                                                    <h:outputText  value="#{car.descripcion}" />
+                                                </h:panelGrid>
+
+                                            </p:repeat>
+
+
+
+                                        </p:panelGrid> 
+
+                                        <p:gmap id="gmap" center="-2.897028,-79.004416" zoom="15"  type="HYBRID" style="width:100%;height:400px" 
+                                                model="#{trayectoController.emptyModel}"  onPointClick="handlePointClick(event);" widgetVar="map" >
+
+
+                                            <p:ajax event="overlaySelect" listener="#{trayectoController.onMarkerSelect}" />
+                                             <!--<p:ajax event="markerDrag" listener="#{trayectoController.onMarkerDrag}" update="growl" />-->
+
+                                            <p:gmapInfoWindow id="infoWindow">
+                                                <p:outputPanel style="text-align: center; display: block; margin: auto">
+                                                       <h:panelGroup layout="block">                        
+                                                            <div align="center">
+                                                                <h:panelGroup id="panelimg" rendered="#{trayectoController.selectedimg.imgtrayecto!=null}" styleClass="mt-3" layout="block">
+
+                                                                    <o:graphicImage value="#{trayectoController.selectedimg.imgtrayecto}" dataURI="true"  style="max-width: 50%;"/>
+
+
+                                                                </h:panelGroup>
+                                                            </div>
+
+                                                            <p:separator />
+                                                        </h:panelGroup>
+                                                    
+                                                    
+                                                    <br />
+                                                    <h:outputText value="#{trayectoController.marker.title}" />
+                                                    <br />
+                                                    <p:commandButton id="mirutaSubmit" value="Agregar a Tour" actionListener="#{trayectoController.mistrayectosadd()}" process="@this" update="panelseleccion, growl" style="margin-top:5px" />
+                                                    <p:commandButton id="mirutaSubmitremove" value="Quitar del Tour" actionListener="#{trayectoController.mistrayectosremove()}" process="@this" update="panelseleccion, growl" style="margin-top:5px" />
+                                                </p:outputPanel>
+                                            </p:gmapInfoWindow>
+                                        </p:gmap>
+
+
+                                    </f:view>
+                                </c:if>
+                            </p:panel>
+                        </div> 
+                    </div> 
+                </div>  
+
+            </h:form>   
+
+            <script type="text/javascript">
+                var currentMarker = null;
+
+                function handlePointClick(event) {
+                    if (currentMarker === null) {
+                        document.getElementById('lat').value = event.latLng.lat();
+                        document.getElementById('lng').value = event.latLng.lng();
+                        currentMarker = new google.maps.Marker({
+                            position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+                        });
+
+                        PF('map').addOverlay(currentMarker);
+
+                        PF('dlg').show();
+                    }
+                }
+
+                function markerAddComplete() {
+                    var title = document.getElementById('descripcion');
+                    currentMarker.setTitle(title.value);
+                    title.value = "";
+
+                    currentMarker = null;
+                    PF('dlg').hide();
+                }
+
+                function cancel() {
+                    PF('dlg').hide();
+                    currentMarker.setMap(null);
+                    currentMarker = null;
+
+                    return false;
+                }
+            </script>
+
+
+        </ui:define>
+    </ui:composition>
+
+
+</html>

@@ -1,0 +1,45 @@
+.ui-widget {
+    font-size: 12px !important;
+}
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.ui-button {
+    margin-top: 10px !important;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+    background: rgba(5, 110, 178, 0.95) none repeat scroll 0% 0% !important;
+}
+.panelTabla{
+    background: #ffcc00;    
+}
+.presenta .ui-g-4 {
+    width: 14.333% !important;
+}
+
+.presenta .ui-g-8 {
+    width: 80.667% !important;
+}
+.circulo {
+     width: 16px;
+     height: 16px;
+     -moz-border-radius: 50%;
+     -webkit-border-radius: 50%;
+     border-radius: 100%;
+    
+}
+.ui-growl{
+     background: #ffcc00 !important;    
+}
+
+
+

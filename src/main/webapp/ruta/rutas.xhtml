@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+       xmlns:o="http://omnifaces.org/ui">
+
+  
+                 <p:repeat value="#{rutaController.items}" var="car">
+                                        <div class="ui-g">
+                                            <div class="ui-g-3">
+                                                
+                                                <h:panelGroup layout="block">                        
+                                                    <div align="center">
+                                                        <h:panelGroup id="panelimg" rendered="#{car.imgruta!=null}" styleClass="mt-3" layout="block">
+                                                            
+                                                                 <o:graphicImage value="#{car.imgruta}" dataURI="true"  style="max-width: 100%;"/>
+                                                          
+                                                             
+                                                        </h:panelGroup>
+                                                    </div>
+
+                                                    <p:separator />
+                                                </h:panelGroup>
+                                                
+
+                                                
+                                            </div>
+                                            <div class="ui-g-9">
+                                                <h3>   <h:outputText value="#{car.titulo}" /> </h3>
+                                                <p>
+
+                                                    <h4>   
+                                                        <h:outputText value="#{car.descripcion}" />
+                                                    </h4> 
+
+
+                                                </p>
+                                                <br/>
+                                                <p>
+                                                    <strong>
+                                                        <h:outputText value="Fecha Horario: " />
+                                                        <h:outputText value="#{car.fechahorario}" />
+                                                    </strong>
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+                                    </p:repeat>        
+                       
+            
+
+</html>

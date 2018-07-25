@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+
+  
+                        
+               
+                        <p:carousel value="#{operadorController.items}" headerText="Operadores" var="item" itemStyle="height:300px;text-align:left" numVisible="1" easing="easeOutBounce" style="width:450px" circular="true">
+        
+                    
+                  
+                                               
+                                                    <div class="ui-g">
+                                                        <div class="ui-g-6">
+                                                            <h:panelGroup layout="block">                        
+                                                                <div align="center">
+                                                                    <h:panelGroup id="panelimg" rendered="#{item.imgoperador!=null}" styleClass="mt-3" layout="block">
+
+                                                                             <o:graphicImage value="#{item.imgoperador}" dataURI="true"  style="width: 100%; "/>
+
+                                                                                
+                                                                    </h:panelGroup>
+                                                                    <p:commandButton update=":RutaListForm:datosOperador" value="Seleccionar"  icon="ui-icon-search">
+                                                                                    <f:setPropertyActionListener value="#{item}" target="#{operadorController.selected}" />
+                                                                               </p:commandButton>
+                                                                </div>
+
+                                                                <p:separator />
+                                                            </h:panelGroup>
+                                                            
+                                                          
+                                                        </div>
+                                                        <div class="ui-g-6">
+                                                            <h3>   <h:outputText value="#{item.nombre}" /> </h3>
+                                                            <p>
+
+                                                                <h4>   
+                                                                    <h:outputText value="#{item.direccion}" />
+                                                                </h4> 
+
+
+                                                            </p>
+                                                            <br/>
+                                                            <p>
+                                                                <strong>
+                                                                    <h:outputText value="Teléfono: " />
+                                                                    <h:outputText value="#{item.telefono}" />
+                                                                </strong>
+                                                            </p>
+                                                             <p>
+                                                                <strong>
+                                                                    <h:outputText value="Email: " />
+                                                                    <h:outputText value="#{item.email}" />
+                                                                </strong>
+                                                            </p>
+                                                             <p>
+                                                                <strong>
+                                                                    
+                                                                   <h:outputLink value="#{item.url}" target="_blank" title="#{pagBundle['ViewConciliacionP']}">
+                                                                        #{item.url}
+                                                                    </h:outputLink>
+                                                                </strong>
+                                                            </p>
+                                                            
+                                                            
+                                                            
+                                                            
+
+                                                        </div>
+
+                                                    </div>
+                        
+                      
+                            
+             
+                            
+                             
+                   
+                                                
+               
+                        </p:carousel>
+                    
+  
+          
+            
+
+</html>
